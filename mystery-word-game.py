@@ -9,9 +9,10 @@ def guess_match(computer_chosen_word, guess):
     occurs within the computer's chosen word. !!! Function assumes the
     guess has already been checked for validity outside the function !!!
     """
+    guess = guess.lower()
 
     for letter in computer_chosen_word:
-        if guess.lower() == letter:
+        if guess == letter.lower():
             return True
 
     return False
@@ -39,23 +40,40 @@ def dict_transform(computer_chosen_word):
     computer_word_dict = {}
 
     for letter in computer_chosen_word:
-        computer_word_dict[letter] = 1
+        computer_word_dict[letter.lower()] = 1
 
     for letter in computer_chosen_word:
-        computer_word_dict[letter] += 1
+        computer_word_dict[letter.lower()] += 1
 
     return computer_word_dict
 
 
+def add_to_dict(user_guess_dict, guessed_letter, computer_word_dict):
+    """
+    Function that takes a guessed letter, and if it matches a key in
+    the given computer_word_dict, adds that letter to the given
+    user_guess_dict in the same quantity.
+    """
+    guessed_letter = guessed_letter.lower()
+
+    if guessed_letter in computer_word_dict:
+        if guessed_letter not in user_guess_dict:
+            user_guess_dict[guessed_letter] = computer_word_dict[guessed_letter]
+    pass
+
+
 def guess_prompt_loop(computer_chosen_word):
     """
-    Function that takes the computer's chosen word and repeats the guessing process until the computer's chosen word
-    is guessed or the number of incorrect guesses hits 8.
+    Function that takes the computer's chosen word and repeats the guessing
+    process until the computer's chosen word is guessed or the number of
+    incorrect guesses hits 8.
     """
     wrong_guesses = 0
     entered_letters = 0
+    computer_word_dict = dict_transform(computer_chosen_word)
 
     while (wrong_guesses < 8) and (entered_letters < len(computer_chosen_word)):
+
         user_guess = input("Guess ONE letter: ")
         wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
 
