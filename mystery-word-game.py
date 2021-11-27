@@ -40,7 +40,7 @@ def dict_transform(computer_chosen_word):
     computer_word_dict = {}
 
     for letter in computer_chosen_word:
-        computer_word_dict[letter.lower()] = 1
+        computer_word_dict[letter.lower()] = 0
 
     for letter in computer_chosen_word:
         computer_word_dict[letter.lower()] += 1
@@ -59,7 +59,8 @@ def add_to_dict(user_guess_dict, guessed_letter, computer_word_dict):
     if guessed_letter in computer_word_dict:
         if guessed_letter not in user_guess_dict:
             user_guess_dict[guessed_letter] = computer_word_dict[guessed_letter]
-    pass
+
+    return user_guess_dict
 
 
 def guess_prompt_loop(computer_chosen_word):
@@ -71,6 +72,7 @@ def guess_prompt_loop(computer_chosen_word):
     wrong_guesses = 0
     entered_letters = 0
     computer_word_dict = dict_transform(computer_chosen_word)
+    user_guess_dict = {}
 
     while (wrong_guesses < 8) and (entered_letters < len(computer_chosen_word)):
 
@@ -82,6 +84,10 @@ def guess_prompt_loop(computer_chosen_word):
         else:
             print("Your guess is correct!")
             entered_letters += 1
+            user_guess_dict = add_to_dict(user_guess_dict, user_guess, computer_word_dict)
+
+        print(f"Dictionary of correct guesses thus far: {user_guess_dict}")
+        print()
 
     return
 
@@ -97,6 +103,7 @@ def guess_prompt_loop(computer_chosen_word):
 
 chosen_word = "try"
 
+print()
 print("The computer has chosen a word.")
 
 guess_prompt_loop(chosen_word)
