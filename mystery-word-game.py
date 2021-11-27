@@ -17,6 +17,21 @@ def guess_match(computer_choice, guess):
     return False
 
 
+def incorrect_guess_tracker(entry, prior_count):
+    """
+    Function that takes an entry (from the guess_match function) and the
+    count up until the point this function is called and adds to the running
+    total if the entry is false.
+    """
+
+    if entry is False:
+        current_count = prior_count + 1
+    else:
+        current_count = prior_count
+
+    return current_count
+
+
 # =============================================================================
 # O T H E R  C O D E
 # =============================================================================
@@ -26,7 +41,11 @@ def guess_match(computer_choice, guess):
 #         check against.
 
 chosen_word = "try"
+wrong_guesses = 0
 user_guess = input("The computer has chosen a word. Guess ONE of the letters \
 in that word: ")
 
 print(f"Your guess is {guess_match(chosen_word, user_guess)}.")
+
+wrong_guesses = incorrect_guess_tracker(guess_match(chosen_word, user_guess), wrong_guesses)
+print(f"You have {wrong_guesses} incorrect guesses so far.")
