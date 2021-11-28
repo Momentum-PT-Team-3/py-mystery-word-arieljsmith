@@ -39,6 +39,12 @@ def incorrect_guess_tracker(entry, prior_count):
 
 
 def fill_in_blank(computer_chosen_word, replicated_word, letter_guessed):
+    """
+    Function that takes the computer's chosen word, the current letter guessed
+    (letter_guessed), and the current state of the user's correct guesses
+    (replicated_word) and adds the guessed letter to replicated_word in all
+    appropriate places.
+    """
     current_index = 0
     replicated_word_list = list(replicated_word)
 
