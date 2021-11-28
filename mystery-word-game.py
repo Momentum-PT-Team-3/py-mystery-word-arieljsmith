@@ -80,46 +80,70 @@ def guess_prompt_loop(computer_chosen_word):
     :param computer_chosen_word: string - the word chosen by the computer.
     :return: NONE
     """
-    wrong_guesses = 0
-    all_user_guesses = []
-    replicated_word = "_" * len(computer_chosen_word)
-    ACCEPTED_LETTERS = set(string.ascii_lowercase)
-    unguessed_letters = sorted(list(ACCEPTED_LETTERS))
+    continuation = True
 
-    while (wrong_guesses < 8) and ("_" in replicated_word):
+    while continuation is True:
+        wrong_guesses = 0
+        all_user_guesses = []
+        replicated_word = "_" * len(computer_chosen_word)
+        ACCEPTED_LETTERS = set(string.ascii_lowercase)
+        unguessed_letters = sorted(list(ACCEPTED_LETTERS))
 
-        user_guess = input("Guess ONE letter: ")
-
-        if len(user_guess) > 1:
-            print("Your guess is too long. Enter ONE letter only.")
-        elif user_guess.lower() not in ACCEPTED_LETTERS:
-            print("Invalid character entered. Please enter only characters found within the English alphabet.")
-        elif user_guess.lower() in all_user_guesses:
-            print("You already guessed that letter. Try again.")
-        elif guess_match(computer_chosen_word, user_guess) is False:
-            print("Your guess is incorrect.")
-            all_user_guesses.append(user_guess.lower())
-            wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
-            unguessed_letters.remove(user_guess.lower())
-        else:
-            print("Your guess is correct!")
-            all_user_guesses.append(user_guess.lower())
-            replicated_word = fill_in_blank(computer_chosen_word, replicated_word, user_guess)
-            unguessed_letters.remove(user_guess.lower())
-
-        print(f"WORD SO FAR: {replicated_word}")
-        print(f"UNUSED LETTERS: {unguessed_letters}")
         print()
+        print(f"The computer has chosen a word. It is {len(computer_chosen_word)} letter(s) long.")
 
-    if "_" not in replicated_word:
-        print("Congratulations, you guessed the word!")
-    else:
-        print(f'So close! The word was "{computer_chosen_word}".')
+        while (wrong_guesses < 8) and ("_" in replicated_word):
+
+            user_guess = input("Guess ONE letter: ")
+
+            if len(user_guess) > 1:
+                print("Your guess is too long. Enter ONE letter only.")
+            elif user_guess.lower() not in ACCEPTED_LETTERS:
+                print("Invalid character entered. Please enter only characters found within the English alphabet.")
+            elif user_guess.lower() in all_user_guesses:
+                print("You already guessed that letter. Try again.")
+            elif guess_match(computer_chosen_word, user_guess) is False:
+                print("Your guess is incorrect.")
+                all_user_guesses.append(user_guess.lower())
+                wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
+                unguessed_letters.remove(user_guess.lower())
+            else:
+                print("Your guess is correct!")
+                all_user_guesses.append(user_guess.lower())
+                replicated_word = fill_in_blank(computer_chosen_word, replicated_word, user_guess)
+                unguessed_letters.remove(user_guess.lower())
+
+            print(f"WORD SO FAR: {replicated_word}")
+            print(f"UNUSED LETTERS: {unguessed_letters}")
+            print()
+
+        if "_" not in replicated_word:
+            print("Congratulations, you guessed the word!")
+        else:
+            print(f'So close! The word was "{computer_chosen_word}".')
+
+        continue_loop_check = False
+
+        while continue_loop_check is False:
+            
+            intent_to_continue = input("Would you like to play again? [y/n]: ")
+        
+            if intent_to_continue.lower() == "y":
+                continuation = True
+                continue_loop_check = True
+                print("Sweet! Let's go.")
+            elif intent_to_continue.lower() == "n":
+                continuation = False
+                continue_loop_check = True
+                print("Thank you for playing!")
+            else:
+                print('Invalid input. Please only enter "y" or "n".')
+            
+            print()
 
     return
 
 
-# NOTE TO SELF: Next step will be to reveal word to user if it wasn't guessed.
 # NOTE TO SELF: Next step will be to implement a check after a game ends to see
 #               whether or not the user would like to play another game. If so,
 #               run game again. If not, exit.
@@ -132,8 +156,5 @@ def guess_prompt_loop(computer_chosen_word):
 # NOTE 1: Test word will be "aardvark"
 
 chosen_word = "aardvark"
-
-print()
-print(f"The computer has chosen a word. It is {len(chosen_word)} letter(s) long.")
 
 guess_prompt_loop(chosen_word)
