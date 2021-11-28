@@ -1,4 +1,11 @@
 # =============================================================================
+# I M P O R T S
+# =============================================================================
+
+import string
+
+
+# =============================================================================
 # F U N C T I O N S
 # =============================================================================
 
@@ -54,12 +61,17 @@ def guess_prompt_loop(computer_chosen_word):
     wrong_guesses = 0
     all_user_guesses = []
     replicated_word = "_" * len(computer_chosen_word)
+    ACCEPTED_LETTERS = set(string.ascii_lowercase)
 
     while (wrong_guesses < 8) and ("_" in replicated_word):
 
         user_guess = input("Guess ONE letter: ")
 
-        if user_guess.lower() in all_user_guesses:
+        if len(user_guess) > 1:
+            print("Your guess is too long. Enter ONE letter only.")
+        elif user_guess.lower() not in ACCEPTED_LETTERS:
+            print("Invalid character entered. Please enter only characters found within the English alphabet.")
+        elif user_guess.lower() in all_user_guesses:
             print("You already guessed that letter. Try again.")
         elif guess_match(computer_chosen_word, user_guess) is False:
             print("Your guess is incorrect.")
@@ -80,7 +92,7 @@ def guess_prompt_loop(computer_chosen_word):
 # O T H E R  C O D E
 # =============================================================================
 
-# NOTE 1: Test word will be "try"
+# NOTE 1: Test word will be "aardvark"
 # NOTE 2: Consider making a separate doc defining a constant for all English
 #         letters (upper AND lower? Likely unnecessary) that can be used to
 #         check against.
@@ -88,7 +100,7 @@ def guess_prompt_loop(computer_chosen_word):
 chosen_word = "aardvark"
 
 print()
-print("The computer has chosen a word.")
+print(f"The computer has chosen a word. It is {len(chosen_word)} letter(s) long.")
 
 guess_prompt_loop(chosen_word)
 # wrong_guesses = 0
