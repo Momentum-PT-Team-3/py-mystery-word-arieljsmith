@@ -15,6 +15,9 @@ def guess_match(computer_chosen_word, guess):
     arguments and returns a boolean indicating whether or not that guess
     occurs within the computer's chosen word. !!! Function assumes the
     guess has already been checked for validity outside the function !!!
+
+    :param computer_chosen_word: string - the word chosen by the computer.
+    :param guess: string - the letter guessed by the user.
     """
     guess = guess.lower()
 
@@ -94,14 +97,19 @@ def guess_prompt_loop(computer_chosen_word):
     return
 
 
+# NOTE TO SELF: Next step will be to track which letters HAVEN'T been guessed
+#               and print them after each valid guess.
+# NOTE TO SELF: Next step will be to reveal word to user if it wasn't guessed.
+# NOTE TO SELF: Next step will be to implement a check after a game ends to see
+#               whether or not the user would like to play another game. If so,
+#               run game again. If not, exit.
+
+
 # =============================================================================
 # O T H E R  C O D E
 # =============================================================================
 
 # NOTE 1: Test word will be "aardvark"
-# NOTE 2: Consider making a separate doc defining a constant for all English
-#         letters (upper AND lower? Likely unnecessary) that can be used to
-#         check against.
 
 chosen_word = "aardvark"
 
@@ -109,11 +117,3 @@ print()
 print(f"The computer has chosen a word. It is {len(chosen_word)} letter(s) long.")
 
 guess_prompt_loop(chosen_word)
-# wrong_guesses = 0
-# user_guess = input("The computer has chosen a word. Guess ONE of the letters \
-# in that word: ")
-
-# print(f"Your guess is {guess_match(chosen_word, user_guess)}.")
-
-# wrong_guesses = incorrect_guess_tracker(guess_match(chosen_word, user_guess), wrong_guesses)
-# print(f"You have {wrong_guesses} incorrect guesses so far.")
