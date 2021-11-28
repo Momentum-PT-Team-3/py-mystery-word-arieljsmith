@@ -18,6 +18,7 @@ def guess_match(computer_chosen_word, guess):
 
     :param computer_chosen_word: string - the word chosen by the computer.
     :param guess: string - the letter guessed by the user.
+    :return: bool - True if guess is in computer_chosen_word, false if not.
     """
     guess = guess.lower()
 
@@ -33,6 +34,10 @@ def incorrect_guess_tracker(entry, prior_count):
     Function that takes an entry (from the guess_match function) and the
     count up until the point this function is called and adds to the running
     total if the entry is false.
+
+    :param entry: bool - the value returned by the function guess_match.
+    :param prior_count: int - how many prior incorrect guesses have been made.
+    :return current_count: int - updated count of incorrect guesses.
     """
 
     if entry is False:
@@ -47,6 +52,11 @@ def fill_in_blank(computer_chosen_word, replicated_word, letter_guessed):
     (letter_guessed), and the current state of the user's correct guesses
     (replicated_word) and adds the guessed letter to replicated_word in all
     appropriate places.
+
+    :param computer_chosen_word: string - the word chosen by the computer.
+    :param replicated_word: string - current state of the user-guessed word.
+    :param letter_guessed: string - the letter guessed by the user.
+    :return replicated_word: string - updated state of the user-guessed word.
     """
     current_index = 0
     replicated_word_list = list(replicated_word)
@@ -66,6 +76,9 @@ def guess_prompt_loop(computer_chosen_word):
     Function that takes the computer's chosen word and repeats the guessing
     process until the computer's chosen word is guessed or the number of
     incorrect guesses hits 8.
+
+    :param computer_chosen_word: string - the word chosen by the computer.
+    :return: NONE
     """
     wrong_guesses = 0
     all_user_guesses = []
