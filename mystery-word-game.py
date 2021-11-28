@@ -111,6 +111,11 @@ def guess_prompt_loop(computer_chosen_word):
         print(f"UNUSED LETTERS: {unguessed_letters}")
         print()
 
+    if "_" not in replicated_word:
+        print("Congratulations, you guessed the word!")
+    else:
+        print(f'So close! The word was "{computer_chosen_word}".')
+
     return
 
 
