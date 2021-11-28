@@ -27,8 +27,8 @@ def incorrect_guess_tracker(entry, prior_count):
 
     if entry is False:
         current_count = prior_count + 1
-    else:
-        current_count = prior_count
+    # else:
+    #     current_count = prior_count
 
     return current_count
 
@@ -48,7 +48,7 @@ def dict_transform(computer_chosen_word):
     return computer_word_dict
 
 
-def add_to_dict(user_guess_dict, guessed_letter, computer_word_dict):
+def add_to_dict(user_correct_guess_dict, guessed_letter, computer_word_dict):
     """
     Function that takes a guessed letter, and if it matches a key in
     the given computer_word_dict, adds that letter to the given
@@ -57,10 +57,10 @@ def add_to_dict(user_guess_dict, guessed_letter, computer_word_dict):
     guessed_letter = guessed_letter.lower()
 
     if guessed_letter in computer_word_dict:
-        if guessed_letter not in user_guess_dict:
-            user_guess_dict[guessed_letter] = computer_word_dict[guessed_letter]
+        if guessed_letter not in user_correct_guess_dict:
+            user_correct_guess_dict[guessed_letter] = computer_word_dict[guessed_letter]
 
-    return user_guess_dict
+    return user_correct_guess_dict
 
 
 def guess_prompt_loop(computer_chosen_word):
@@ -72,21 +72,26 @@ def guess_prompt_loop(computer_chosen_word):
     wrong_guesses = 0
     entered_letters = 0
     computer_word_dict = dict_transform(computer_chosen_word)
-    user_guess_dict = {}
+    user_correct_guess_dict = {}
+    all_user_guesses = []
 
     while (wrong_guesses < 8) and (entered_letters < len(computer_chosen_word)):
 
         user_guess = input("Guess ONE letter: ")
-        wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
 
-        if guess_match(computer_chosen_word, user_guess) is False:
+        if user_guess.lower() in all_user_guesses:
+            print("You already guessed that letter. Try again.")
+        elif guess_match(computer_chosen_word, user_guess) is False:
             print("Your guess is incorrect.")
+            all_user_guesses.append(user_guess.lower())
+            wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
         else:
             print("Your guess is correct!")
             entered_letters += 1
-            user_guess_dict = add_to_dict(user_guess_dict, user_guess, computer_word_dict)
+            all_user_guesses.append(user_guess.lower())
+            user_correct_guess_dict = add_to_dict(user_correct_guess_dict, user_guess, computer_word_dict)
 
-        print(f"Dictionary of correct guesses thus far: {user_guess_dict}")
+        print(f"Dictionary of correct guesses thus far: {user_correct_guess_dict}")
         print()
 
     return
