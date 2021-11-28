@@ -84,6 +84,7 @@ def guess_prompt_loop(computer_chosen_word):
     all_user_guesses = []
     replicated_word = "_" * len(computer_chosen_word)
     ACCEPTED_LETTERS = set(string.ascii_lowercase)
+    unguessed_letters = sorted(list(ACCEPTED_LETTERS))
 
     while (wrong_guesses < 8) and ("_" in replicated_word):
 
@@ -99,19 +100,20 @@ def guess_prompt_loop(computer_chosen_word):
             print("Your guess is incorrect.")
             all_user_guesses.append(user_guess.lower())
             wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
+            unguessed_letters.remove(user_guess.lower())
         else:
             print("Your guess is correct!")
             all_user_guesses.append(user_guess.lower())
             replicated_word = fill_in_blank(computer_chosen_word, replicated_word, user_guess)
+            unguessed_letters.remove(user_guess.lower())
 
-        print(replicated_word)
+        print(f"WORD SO FAR: {replicated_word}")
+        print(f"UNUSED LETTERS: {unguessed_letters}")
         print()
 
     return
 
 
-# NOTE TO SELF: Next step will be to track which letters HAVEN'T been guessed
-#               and print them after each valid guess.
 # NOTE TO SELF: Next step will be to reveal word to user if it wasn't guessed.
 # NOTE TO SELF: Next step will be to implement a check after a game ends to see
 #               whether or not the user would like to play another game. If so,
