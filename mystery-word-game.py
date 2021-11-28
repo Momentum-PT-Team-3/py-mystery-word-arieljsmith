@@ -27,40 +27,22 @@ def incorrect_guess_tracker(entry, prior_count):
 
     if entry is False:
         current_count = prior_count + 1
-    # else:
-    #     current_count = prior_count
 
     return current_count
 
 
-def dict_transform(computer_chosen_word):
-    """
-    Takes the word chosen by the computer and makes it into a dictionary.
-    """
-    computer_word_dict = {}
+def fill_in_blank(computer_chosen_word, replicated_word, letter_guessed):
+    current_index = 0
+    replicated_word_list = list(replicated_word)
 
-    for letter in computer_chosen_word:
-        computer_word_dict[letter.lower()] = 0
+    for character in computer_chosen_word:
+        if character.lower() == letter_guessed.lower():
+            replicated_word_list[current_index] = letter_guessed.lower()
+        current_index += 1
 
-    for letter in computer_chosen_word:
-        computer_word_dict[letter.lower()] += 1
+    replicated_word = "".join(replicated_word_list)
 
-    return computer_word_dict
-
-
-def add_to_dict(user_correct_guess_dict, guessed_letter, computer_word_dict):
-    """
-    Function that takes a guessed letter, and if it matches a key in
-    the given computer_word_dict, adds that letter to the given
-    user_guess_dict in the same quantity.
-    """
-    guessed_letter = guessed_letter.lower()
-
-    if guessed_letter in computer_word_dict:
-        if guessed_letter not in user_correct_guess_dict:
-            user_correct_guess_dict[guessed_letter] = computer_word_dict[guessed_letter]
-
-    return user_correct_guess_dict
+    return replicated_word
 
 
 def guess_prompt_loop(computer_chosen_word):
@@ -70,12 +52,10 @@ def guess_prompt_loop(computer_chosen_word):
     incorrect guesses hits 8.
     """
     wrong_guesses = 0
-    entered_letters = 0
-    computer_word_dict = dict_transform(computer_chosen_word)
-    user_correct_guess_dict = {}
     all_user_guesses = []
+    replicated_word = "_" * len(computer_chosen_word)
 
-    while (wrong_guesses < 8) and (entered_letters < len(computer_chosen_word)):
+    while (wrong_guesses < 8) and ("_" in replicated_word):
 
         user_guess = input("Guess ONE letter: ")
 
@@ -87,11 +67,10 @@ def guess_prompt_loop(computer_chosen_word):
             wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
         else:
             print("Your guess is correct!")
-            entered_letters += 1
             all_user_guesses.append(user_guess.lower())
-            user_correct_guess_dict = add_to_dict(user_correct_guess_dict, user_guess, computer_word_dict)
+            replicated_word = fill_in_blank(computer_chosen_word, replicated_word, user_guess)
 
-        print(f"Dictionary of correct guesses thus far: {user_correct_guess_dict}")
+        print(replicated_word)
         print()
 
     return
@@ -106,7 +85,7 @@ def guess_prompt_loop(computer_chosen_word):
 #         letters (upper AND lower? Likely unnecessary) that can be used to
 #         check against.
 
-chosen_word = "try"
+chosen_word = "aardvark"
 
 print()
 print("The computer has chosen a word.")
