@@ -71,6 +71,39 @@ def fill_in_blank(computer_chosen_word, replicated_word, letter_guessed):
     return replicated_word
 
 
+def split_by_difficulty(word_list):
+    easy_words, normal_words, hard_words = [], [], []
+
+    for word in word_list:
+        if len(word) <= 5:
+            easy_words.append(word)
+        elif 5 < len(word) <= 8:
+            normal_words.append(word)
+        else:
+            hard_words.append(word)
+
+    return easy_words, normal_words, hard_words
+
+
+def select_difficulty(easy_list, normal_list, hard_list):
+    valid_input = False
+
+    while not valid_input:
+        desired_difficulty = input("Select game difficulty (easy, normal, hard): ")
+        if desired_difficulty.lower() == "easy" or desired_difficulty.lower() == "normal"\
+             or desired_difficulty.lower() == "hard":
+            valid_input = True
+            if desired_difficulty.lower() == "easy":
+                return easy_list
+            elif desired_difficulty.lower() == "normal":
+                return normal_list
+            else:
+                return hard_list
+        else:
+            print("Invalid input. Please only enter 'easy', 'normal', or 'hard'.")
+            print()
+
+
 def guess_prompt_loop(computer_chosen_word):
     """
     Function that takes the computer's chosen word and repeats the guessing
@@ -125,9 +158,9 @@ def guess_prompt_loop(computer_chosen_word):
         continue_loop_check = False
 
         while continue_loop_check is False:
-            
+
             intent_to_continue = input("Would you like to play again? [y/n]: ")
-        
+
             if intent_to_continue.lower() == "y":
                 continuation = True
                 continue_loop_check = True
@@ -138,15 +171,10 @@ def guess_prompt_loop(computer_chosen_word):
                 print("Thank you for playing!")
             else:
                 print('Invalid input. Please only enter "y" or "n".')
-            
+
             print()
 
     return
-
-
-# NOTE TO SELF: Next step will be to implement a check after a game ends to see
-#               whether or not the user would like to play another game. If so,
-#               run game again. If not, exit.
 
 
 # =============================================================================
@@ -155,6 +183,53 @@ def guess_prompt_loop(computer_chosen_word):
 
 # NOTE 1: Test word will be "aardvark"
 
-chosen_word = "aardvark"
+with open("words.txt", "r") as big_forkin_word_file:
+    chosen_word = "aardvark"
 
-guess_prompt_loop(chosen_word)
+    big_forkin_word_list = big_forkin_word_file.readlines()
+    new_big_forkin_word_list = []
+    for word_entry in big_forkin_word_list:
+        new_big_forkin_word_list.append(word_entry[:-1])
+
+    easy_list, normal_list, hard_list = split_by_difficulty(new_big_forkin_word_list)
+    selected_difficulty_word_list = select_difficulty(easy_list, normal_list, hard_list)
+    print()
+
+    guess_prompt_loop(chosen_word)
+
+# CONSIDER SETTING UP DIFFICULTY INTO DICTIONARIES
+
+# =============================================================================
+# M I S C E L L A N Y
+# =============================================================================
+
+# NOTE: Might use this guy if I have time to toss him in. Time will tell.
+
+#                             ▓▓▓▓▓▓▓       ▓▓▓▓▓▓▓▓
+#                           ▓▓░░░░░░▓▓    ▓▓░░░░░░░▓▓
+#                          ▓▓░░░██░░░░▓▓▓▓░░░░██░░░░▓▓
+#     ▒▒▒▒▒▒▒▒▒▒▒        ▒▒▒░░░░██░░░░░░░░░░░░██░░░░░▓▓
+#   ▓▓░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒░░░░░░░░░░░░░░░░░░░░░░░░░░░▓▓
+#   ▓▓▓▓░░░░░░▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓▓
+#   ▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▒░░░░░░░▓▓
+#     ▒▒▒▒▒▓░░░░▓░░░▓░░░▓░░░▓░░░▓░░░▓░░░▓░░░▓▒░░░░░░░░▓▓
+#       ▓▓░▓▓░░▓▓░░▓▓░░▓▓░░▓▓░░▓▓░░▓▓░░▓▓░░▓░▒▒░░░░░░░▓▓
+#         ▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓▓
+#           ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓▓
+#                      ▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓▓
+#                    ▓▓▓▓▓░░░░░░░░░░░░░░░░▒▒░░░░░░░░░░░▓▓
+#                   ▓▓░░▓▓░░░░░░░░░░░░░░░░░░▓▓░░░░░░░░░▓▓
+#                  ▓▓░░▓▓░░░░░░░░░░░░░░░░░░░▓▓░░░░░░░░░▓▓
+#                  ▓▓░░▓▓░░░░░░░░░░░░░░░░░░░░▓▓░░░░░░░░▓▓
+#                  ▓▓░░▓▓░░░░░░░░░░░░░░░░░░░░▓▓░░░░░░░░▓▓
+#                  ▓▓░░▓▓░░░░░░░░░░░░░░░░░░░░░░▓▓░░░░░░▓▓
+#                  ▓▓░░▓▓░░░░░░░░░░░░░░░░░░░░░░▓▓░░░░░▒▓▓
+#                  ▓▓░░▓▓░░░░░░░░░░░░░░░░░░░░░░░▓▓░░▒▒░▓▓       ▒
+#                    ▒▒▓▓░░░░░░░░░░░░░░░░░░░░░░░░░▒▒▒░░▓▓       ▒▒
+#                     ▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▒▓      ▒▒▒▒
+#                        ▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓   ▓▓░░░▓
+#                       ▓▓░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░▓▓░░░░░░░░▓▓▓░░░░░▓▓
+#                       ▓▓░░░░▓▓          ▓▓░░░░▓▓▓▓▓▓░░░░░░░░░░▓▓
+#                       ▓▓░░░░▓▓          ▓▓░░░░▓▓      ▒▒▒▒▒▓▓▓
+#                       ▓▓░░░░▓▓          ▓▓░░░░▓▓
+#                        ▓▓▓▓▓▓            ▓▓▓▓▓▓
