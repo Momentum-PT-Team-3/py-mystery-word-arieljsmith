@@ -3,6 +3,7 @@
 # =============================================================================
 
 import string
+import random
 
 
 # =============================================================================
@@ -72,6 +73,15 @@ def fill_in_blank(computer_chosen_word, replicated_word, letter_guessed):
 
 
 def split_by_difficulty(word_list):
+    """
+    Function that takes a list of words and sorts that list into three
+    groups (easy, normal, or hard) depending on the length of each word.
+
+    :param word_list: list - list of words computer can choose from
+    :return easy_words: list - list of words between 1-5 characters
+    :return normal_words: list - list of words between 6-8 characters
+    :return hard_words: list - list of words of 9 or more characters
+    """
     easy_words, normal_words, hard_words = [], [], []
 
     for word in word_list:
@@ -86,12 +96,21 @@ def split_by_difficulty(word_list):
 
 
 def select_difficulty(easy_list, normal_list, hard_list):
+    """
+    Function that takes three lists of words separated according to word
+    length, asks the user for the desired game difficulty level, and returns
+    the list associated with that difficulty level.
+    
+    :param easy_list: list - list of words between 1-5 characters
+    :param normal_list: list - list of words between 6-8 characters
+    :param hard_list: list - list of words of 9 or more characters
+    :return easy_list, normal_list, OR hard_list: list - see parameters
+    """
     valid_input = False
 
     while not valid_input:
         desired_difficulty = input("Select game difficulty (easy, normal, hard): ")
-        if desired_difficulty.lower() == "easy" or desired_difficulty.lower() == "normal"\
-             or desired_difficulty.lower() == "hard":
+        if desired_difficulty.lower() == "easy" or desired_difficulty.lower() == "normal" or desired_difficulty.lower() == "hard":
             valid_input = True
             if desired_difficulty.lower() == "easy":
                 return easy_list
@@ -104,7 +123,7 @@ def select_difficulty(easy_list, normal_list, hard_list):
             print()
 
 
-def guess_prompt_loop(computer_chosen_word):
+def guess_prompt_loop():
     """
     Function that takes the computer's chosen word and repeats the guessing
     process until the computer's chosen word is guessed or the number of
@@ -116,6 +135,11 @@ def guess_prompt_loop(computer_chosen_word):
     continuation = True
 
     while continuation is True:
+        selected_difficulty_word_list = select_difficulty(easy_list, normal_list, hard_list)
+        print()
+
+        computer_chosen_word = random.choice(selected_difficulty_word_list)
+
         wrong_guesses = 0
         all_user_guesses = []
         replicated_word = "_" * len(computer_chosen_word)
@@ -181,21 +205,15 @@ def guess_prompt_loop(computer_chosen_word):
 # O T H E R  C O D E
 # =============================================================================
 
-# NOTE 1: Test word will be "aardvark"
-
 with open("words.txt", "r") as big_forkin_word_file:
-    chosen_word = "aardvark"
-
     big_forkin_word_list = big_forkin_word_file.readlines()
     new_big_forkin_word_list = []
     for word_entry in big_forkin_word_list:
         new_big_forkin_word_list.append(word_entry[:-1])
 
     easy_list, normal_list, hard_list = split_by_difficulty(new_big_forkin_word_list)
-    selected_difficulty_word_list = select_difficulty(easy_list, normal_list, hard_list)
-    print()
 
-    guess_prompt_loop(chosen_word)
+    guess_prompt_loop()
 
 # CONSIDER SETTING UP DIFFICULTY INTO DICTIONARIES
 
