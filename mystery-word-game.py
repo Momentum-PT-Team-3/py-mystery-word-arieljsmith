@@ -127,7 +127,7 @@ def request_continuation_input():
     """
     Function that, when called, prompts the user on their desire to play one more round.
     Returns the user's answer as True or False.
-    
+
     :return new_continuation_state: boolean - indicate's user's desire to play another round
     """
 
@@ -153,7 +153,7 @@ def request_continuation_input():
     return new_continuation_state
 
 
-def guess_prompt_loop():
+def guess_prompt_loop(computer_chosen_word):
     """
     Function that takes the computer's chosen word and repeats the guessing
     process until the computer's chosen word is guessed or the number of
@@ -161,6 +161,48 @@ def guess_prompt_loop():
 
     :param computer_chosen_word: string - the word chosen by the computer.
     :return: NONE
+    """
+    wrong_guesses = 0
+    all_user_guesses = []
+    replicated_word = "_" * len(computer_chosen_word)
+    ACCEPTED_LETTERS = set(string.ascii_lowercase)
+    unguessed_letters = sorted(list(ACCEPTED_LETTERS))
+
+    while (wrong_guesses < 8) and ("_" in replicated_word):
+
+        user_guess = input("Guess ONE letter: ")
+
+        if len(user_guess) > 1:
+            print("Your guess is too long. Enter ONE letter only.")
+        elif user_guess.lower() not in ACCEPTED_LETTERS:
+            print("Invalid character entered. Please enter only characters found within the English alphabet.")
+        elif user_guess.lower() in all_user_guesses:
+            print("You already guessed that letter. Try again.")
+        elif guess_match(computer_chosen_word, user_guess) is False:
+            print("Your guess is incorrect.")
+            all_user_guesses.append(user_guess.lower())
+            wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
+            unguessed_letters.remove(user_guess.lower())
+        else:
+            print("Your guess is correct!")
+            all_user_guesses.append(user_guess.lower())
+            replicated_word = fill_in_blank(computer_chosen_word, replicated_word, user_guess)
+            unguessed_letters.remove(user_guess.lower())
+
+        print(f"WORD SO FAR: {replicated_word}")
+        print(f"UNUSED LETTERS: {unguessed_letters}")
+        print()
+
+    if "_" not in replicated_word:
+        print("Congratulations, you guessed the word!")
+    else:
+        print(f'So close! The word was "{computer_chosen_word}".')
+
+    return    
+
+
+def game_loop():
+    """
     """
     continuation = True
 
@@ -171,44 +213,10 @@ def guess_prompt_loop():
 
         computer_chosen_word = random.choice(selected_difficulty_word_list)
 
-        wrong_guesses = 0
-        all_user_guesses = []
-        replicated_word = "_" * len(computer_chosen_word)
-        ACCEPTED_LETTERS = set(string.ascii_lowercase)
-        unguessed_letters = sorted(list(ACCEPTED_LETTERS))
-
         print()
         print(f"The computer has chosen a word. It is {len(computer_chosen_word)} letter(s) long.")
 
-        while (wrong_guesses < 8) and ("_" in replicated_word):
-
-            user_guess = input("Guess ONE letter: ")
-
-            if len(user_guess) > 1:
-                print("Your guess is too long. Enter ONE letter only.")
-            elif user_guess.lower() not in ACCEPTED_LETTERS:
-                print("Invalid character entered. Please enter only characters found within the English alphabet.")
-            elif user_guess.lower() in all_user_guesses:
-                print("You already guessed that letter. Try again.")
-            elif guess_match(computer_chosen_word, user_guess) is False:
-                print("Your guess is incorrect.")
-                all_user_guesses.append(user_guess.lower())
-                wrong_guesses = incorrect_guess_tracker(guess_match(computer_chosen_word, user_guess), wrong_guesses)
-                unguessed_letters.remove(user_guess.lower())
-            else:
-                print("Your guess is correct!")
-                all_user_guesses.append(user_guess.lower())
-                replicated_word = fill_in_blank(computer_chosen_word, replicated_word, user_guess)
-                unguessed_letters.remove(user_guess.lower())
-
-            print(f"WORD SO FAR: {replicated_word}")
-            print(f"UNUSED LETTERS: {unguessed_letters}")
-            print()
-
-        if "_" not in replicated_word:
-            print("Congratulations, you guessed the word!")
-        else:
-            print(f'So close! The word was "{computer_chosen_word}".')
+        guess_prompt_loop(computer_chosen_word)
 
         continuation = request_continuation_input()
 
@@ -227,7 +235,7 @@ with open("words.txt", "r") as big_forkin_word_file:
 
     easy_list, normal_list, hard_list = split_by_difficulty(new_big_forkin_word_list)
 
-    guess_prompt_loop()
+    game_loop()
 
 # CONSIDER SETTING UP DIFFICULTY INTO DICTIONARIES
 
