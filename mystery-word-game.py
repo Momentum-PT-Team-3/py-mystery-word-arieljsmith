@@ -10,6 +10,22 @@ import random
 # F U N C T I O N S
 # =============================================================================
 
+def create_word_list(big_forkin_word_file):
+    """
+    Function that takes a file of words and creates a list with each word as
+    its own element
+
+    :param big_forkin_word_file: file - file containing words we want to make a list of
+    """
+
+    big_forkin_word_list = big_forkin_word_file.readlines()
+    new_big_forkin_word_list = []
+    for word_entry in big_forkin_word_list:
+        new_big_forkin_word_list.append(word_entry[:-1])
+
+    return new_big_forkin_word_list
+
+
 def guess_match(computer_chosen_word, guess):
     """
     Function that takes the computer's chosen word and user's guess as
@@ -198,13 +214,15 @@ def guess_prompt_loop(computer_chosen_word):
     else:
         print(f'So close! The word was "{computer_chosen_word}".')
 
-    return    
+    return
 
 
 def game_loop():
     """
     Function that sets the stage for the game and loops the whole game for as
     long as the user desires to play.
+
+    :return: NONE
     """
     continuation = True
 
@@ -230,12 +248,8 @@ def game_loop():
 # =============================================================================
 
 with open("words.txt", "r") as big_forkin_word_file:
-    big_forkin_word_list = big_forkin_word_file.readlines()
-    new_big_forkin_word_list = []
-    for word_entry in big_forkin_word_list:
-        new_big_forkin_word_list.append(word_entry[:-1])
 
-    easy_list, normal_list, hard_list = split_by_difficulty(new_big_forkin_word_list)
+    easy_list, normal_list, hard_list = split_by_difficulty(create_word_list(big_forkin_word_file))
 
     game_loop()
 
