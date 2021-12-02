@@ -123,9 +123,15 @@ def select_difficulty(easy_list, normal_list, hard_list):
             print()
 
 
-def request_continuation_input(current_continuation_state):
+def request_continuation_input():
+    """
+    Function that, when called, prompts the user on their desire to play one more round.
+    Returns the user's answer as True or False.
+    
+    :return new_continuation_state: boolean - indicate's user's desire to play another round
+    """
+
     continue_loop_check = False
-    new_continuation_state = current_continuation_state
 
     while continue_loop_check is False:
 
@@ -204,7 +210,7 @@ def guess_prompt_loop():
         else:
             print(f'So close! The word was "{computer_chosen_word}".')
 
-        continuation = request_continuation_input(continuation)
+        continuation = request_continuation_input()
 
     return
 
