@@ -203,6 +203,8 @@ def guess_prompt_loop(computer_chosen_word):
 
 def game_loop():
     """
+    Function that sets the stage for the game and loops the whole game for as
+    long as the user desires to play.
     """
     continuation = True
 
