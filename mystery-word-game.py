@@ -100,7 +100,7 @@ def select_difficulty(easy_list, normal_list, hard_list):
     Function that takes three lists of words separated according to word
     length, asks the user for the desired game difficulty level, and returns
     the list associated with that difficulty level.
-    
+
     :param easy_list: list - list of words between 1-5 characters
     :param normal_list: list - list of words between 6-8 characters
     :param hard_list: list - list of words of 9 or more characters
@@ -123,6 +123,30 @@ def select_difficulty(easy_list, normal_list, hard_list):
             print()
 
 
+def request_continuation_input(current_continuation_state):
+    continue_loop_check = False
+    new_continuation_state = current_continuation_state
+
+    while continue_loop_check is False:
+
+        intent_to_continue = input("Would you like to play again? [y/n]: ")
+
+        if intent_to_continue.lower() == "y":
+            new_continuation_state = True
+            continue_loop_check = True
+            print("Sweet! Let's go.")
+        elif intent_to_continue.lower() == "n":
+            new_continuation_state = False
+            continue_loop_check = True
+            print("Thank you for playing!")
+        else:
+            print('Invalid input. Please only enter "y" or "n".')
+
+        print()
+
+    return new_continuation_state
+
+
 def guess_prompt_loop():
     """
     Function that takes the computer's chosen word and repeats the guessing
@@ -135,6 +159,7 @@ def guess_prompt_loop():
     continuation = True
 
     while continuation is True:
+        continuation = False
         selected_difficulty_word_list = select_difficulty(easy_list, normal_list, hard_list)
         print()
 
@@ -179,24 +204,7 @@ def guess_prompt_loop():
         else:
             print(f'So close! The word was "{computer_chosen_word}".')
 
-        continue_loop_check = False
-
-        while continue_loop_check is False:
-
-            intent_to_continue = input("Would you like to play again? [y/n]: ")
-
-            if intent_to_continue.lower() == "y":
-                continuation = True
-                continue_loop_check = True
-                print("Sweet! Let's go.")
-            elif intent_to_continue.lower() == "n":
-                continuation = False
-                continue_loop_check = True
-                print("Thank you for playing!")
-            else:
-                print('Invalid input. Please only enter "y" or "n".')
-
-            print()
+        continuation = request_continuation_input(continuation)
 
     return
 
